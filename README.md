@@ -19,7 +19,7 @@ Under linker => Command Line => Additonal Options, include the following:
 C# compilation
 
 1. For those projects that need unittest framework, you will need to add "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\PublicAssemblies" to your reference path. It will not affect your current native compilation.
-2. To generate deterministic build, <Deterministic>true</deterministic> needs to be added into csproj under "<propertygroup></propertygroup>"
+2. To generate deterministic build, <Deterministic>true</deterministic> needs to be added into csproj under "\<propertygroup\>\<\/propertygroup\>"
 
 
 
