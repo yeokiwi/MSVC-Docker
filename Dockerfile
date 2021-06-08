@@ -61,6 +61,7 @@ ENV ROSLYN_COMPILER_LOCATION="C:\Program Files (x86)\Microsoft Visual Studio\201
 
 # Set PATH in one layer to keep image size down.
 RUN powershell setx /M PATH $(${Env:PATH} `
+	+ \";c:\ducible\" `
     + \";${Env:ProgramFiles}\NuGet\" `
     + \";${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\TestAgent\Common7\IDE\CommonExtensions\Microsoft\TestWindow\" `
     + \";${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\" `
@@ -82,6 +83,13 @@ RUN powershell " `
     }"
 
 ADD win64 win64
+ADD ducible ducible
 COPY ["PublicAssemblies", "C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/IDE/PublicAssemblies/"]
+COPY ["setup", "c:\\jenkins"]
+
+RUN Powershell.exe -Command Install-WindowsFeature Web-Server           #INSTALLING IIS                  
+#RUN ["msiexec.exe", "/i", "C:\\jenkins\\jenkins.msi", "/qn"]            #INSTALLING JENKINS
+#RUN Powershell.exe -Command remove-item c:/jenkins –Recurse             #REMOVING SETUP FILES FROM CONTAINER
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+RUN Start-Process "C:\\jenkins\\jenkins.msi" '/qn' -PassThru | Wait-Process;
